@@ -10,6 +10,8 @@
        mod-string]
       [else
         (string->symbol mod-string)]))
+  (unless (module-path? mod)
+    (error 'raco-run "module ~a must be a valid module-path?" mod))
   (list 'submod mod (string->symbol submod-string)))
 
 (define (run mod submod args)
