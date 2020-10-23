@@ -1,3 +1,8 @@
 raco-run
 ========
-README text here.
+
+Run submodules from the command line
+
+```
+$ raco run module submodule args ...
+```
