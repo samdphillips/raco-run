@@ -5,8 +5,7 @@
 (define (build-mod-path mod-string submod-string)
   (define mod
     (cond
-      [(and (string-suffix? mod-string ".rkt")
-            (file-exists? mod-string))
+      [(file-exists? mod-string)
        mod-string]
       [else
         (string->symbol mod-string)]))
