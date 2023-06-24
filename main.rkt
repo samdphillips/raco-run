@@ -2,10 +2,15 @@
 
 (require racket/string)
 
+(define (file-has-lang? file-name)
+  (bytes=?
+   (call-with-input-file file-name (λ (p) (read-bytes 5 p)))
+   #"#lang"))
+
 (define (build-mod-path mod-string submod-string)
   (define mod
     (cond
-      [(file-exists? mod-string)
+      [(and (file-exists? mod-string) (file-has-lang? mod-string))
        mod-string]
       [else
         (string->symbol mod-string)]))
