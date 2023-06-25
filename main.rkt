@@ -3,9 +3,16 @@
 (require racket/string)
 
 (define (file-has-lang? file-name)
-  (bytes=?
-   (call-with-input-file file-name (λ (p) (read-bytes 5 p)))
-   #"#lang"))
+  (define (check-shebang inp)
+    (cond
+      [(equal? #"#!" (read-bytes 2 inp))
+       (read-bytes-line inp)
+       (check-lang inp)]
+      [else
+       (check-lang inp)]))
+  (define (check-lang inp)
+    (equal? #"#lang" (read-bytes 5 inp)))
+  (call-with-input-file file-name check-shebang))
 
 (define (build-mod-path mod-string submod-string)
   (define mod
