@@ -5,7 +5,7 @@
 (define (file-has-lang? file-name)
   (define (check-shebang inp)
     (cond
-      [(equal? #"#!" (read-bytes 2 inp))
+      [(equal? #"#!" (peek-bytes 2 0 inp))
        (read-bytes-line inp)
        (check-lang inp)]
       [else
