@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+      - main
+      - release
+  pull_request:
+  schedule:
+  - cron: "17 16 * * THU"
+jobs:
+  test:
+    strategy:
+      matrix:
+        racket-variant: ["BC", "CS"]
+        racket-version: ["8.9", "8.10", "pre-release", "stable", "current"]
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@master
+    - name: install racket
+      uses: Bogdanp/setup-racket@v1.11
+      with:
+        architecture: 'x64'
+        distribution: 'full'
+        variant: ${{ matrix.racket-variant }}
+        version: ${{ matrix.racket-version }}
+    - name: install cmd package
+      run: raco pkg install --name raco-run-cmd --batch --auto ./raco-run-cmd
+    - name: install base package
+      run: raco pkg install --name raco-run --batch --auto ./raco-run
+    - name: check declared dependencies
+      run: raco setup --check-pkg-deps --unused-pkg-deps --pkgs raco-run raco-run-cmd
+    - name: run tests
+      run: raco test --drdr --package raco-run raco-run-cmd
