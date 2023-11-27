@@ -1,0 +1,35 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  doc:
+    strategy:
+      matrix:
+        racket-variant: ["BC", "CS"]
+        racket-version: ["8.9", "8.10", "pre-release", "stable", "current"]
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@master
+    - name: install racket
+      uses: Bogdanp/setup-racket@v1.11
+      with:
+        architecture: 'x64'
+        distribution: 'full'
+        version: 'stable'
+    - name: install packages
+      run: raco pkg install --batch --auto ./raco-run{,-cmd}
+    - name: build documentation
+      run: |
+        scribble +m --redirect-main http://pkg-build.racket-lang.org/doc/ \
+          --dest ./doc --dest-name index ./raco-run/scribblings/raco-run.scrbl
+    - name: deploy documentation
+      run: |
+        cd doc
+        git init -b gh-pages
+        git config user.name 'GHA'
+        git config user.email samdphillips@gmail.com
+        git add .
+        git commit -m 'Deploy to GitHub Pages'
+        git push --force 'https://samdphillips:${{ github.token }}@github.com/${{ github.repository }}' gh-pages
