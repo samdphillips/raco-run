@@ -4,10 +4,6 @@ on:
       - main
 jobs:
   doc:
-    strategy:
-      matrix:
-        racket-variant: ["BC", "CS"]
-        racket-version: ["8.9", "8.10", "pre-release", "stable", "current"]
     runs-on: ubuntu-latest
     steps:
     - name: checkout
