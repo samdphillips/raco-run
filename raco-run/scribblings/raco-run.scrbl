@@ -9,6 +9,8 @@
 @title{raco-run}
 @author[(author+email "Sam Phillips" "samdphillips@gmail.com")]
 
+@defmodule[raco-run]
+
 @url{https://github.com/samdphillips/raco-run}
 
 Provides a @exec{raco run} sub-command for executing submodules.
