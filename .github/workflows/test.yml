@@ -11,13 +11,13 @@ jobs:
     strategy:
       matrix:
         racket-variant: ["BC", "CS"]
-        racket-version: ["8.9", "8.10", "pre-release", "stable", "current"]
+        racket-version: ["8.14", "8.15", "pre-release", "stable", "current"]
     runs-on: ubuntu-latest
     steps:
     - name: checkout
       uses: actions/checkout@master
     - name: install racket
-      uses: Bogdanp/setup-racket@v1.11
+      uses: Bogdanp/setup-racket@v1.13
       with:
         architecture: 'x64'
         distribution: 'full'
